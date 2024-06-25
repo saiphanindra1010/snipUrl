@@ -4,7 +4,7 @@ const urlData = new mongoose.Schema(
   {
     shortData: { type: String, require: true, unique: true },
     redirecUrl: { type: String, require: true },
-    TotalClicks: [{ timeStamp: { type: Number } }],
+    TotalClicks: [{ timeStamp: { type: String } }],
   },
   {
     timestamps: true,

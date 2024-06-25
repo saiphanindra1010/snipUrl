@@ -5,10 +5,10 @@ import URL from "./model/urlData.js";
 
 const app = express();
 const PORT = 8000;
-
+const DB="mongodb://127.0.0.1:27017/urlShortner"
 //connecting to DB and starting server
-connectDB("mongodb://127.0.0.1:27017/urlShortner").then(() => {
-  console.log("db connected");
+connectDB(DB).then(() => {
+  console.log("DB connected");
   app.listen(PORT, () => {
     console.log("server started", PORT);
   });
@@ -62,25 +62,19 @@ app.use("/url", urlRoute);
 
 app.get("/:id", async (req, res) => {
   const shortUrl = req.params.id;
-  
+  // console.log(shortUrl)
   try {
     let shorturl = await URL.findOneAndUpdate(
       {
         shortData: shortUrl,
       },
-      {
-        $push: {
-          TotalClicks: {
-            timeStamp: new Date(Date.now()).toString(),
-          },
-        },
-      }
+      { $push: {"TotalClicks": {"stamp":["wefffffff"] } } }
     );
-
+    // console.log(shortUrl)
     // Check if shorturl is null before accessing its properties
     if (shorturl) {
-      console.log("Total clicks: " + shorturl.TotalClicks.length);
-      console.log("redi: " + shorturl.redirecUrl);
+      // console.log("Total clicks: " + shorturl.TotalClicks.length);
+      // console.log("redi: " + shorturl.redirecUrl);
       res.redirect(shorturl.redirecUrl);
       
     } else {
@@ -89,8 +83,8 @@ app.get("/:id", async (req, res) => {
     }
   } catch (error) {
     // Handle any errors that occur during the database operation
-    console.error("Error:", error);
-    res.status(500).send("Internal Server Error");
+    console.error("Error:",error);
+    res.status(500).json(error);
   }
 });
 
