@@ -2,8 +2,10 @@ import express from "express";
 import urlRoute from "./routes/url.js";
 import connectDB from "./config/connect.js";
 import URL from "./model/urlData.js";
-
+import staticData from "./routes/staticData.js"
+import ejs from "ejs"
 const app = express();
+import path from "path"
 const PORT = 8000;
 const DB="mongodb://127.0.0.1:27017/urlShortner"
 //connecting to DB and starting server
@@ -35,30 +37,11 @@ const validateJson = (req, res, next) => {
   next();
 };
 app.use(express.json());
-
+app.set("view engine","ejs")
+app.set("views",path.resolve('./views'))
 //routes
+app.use("/",staticData)
 app.use("/url", urlRoute);
-// app.get("/:id", async (req, res) => {
-//   const shortUrl = req.params.id;
-//   //   let shorturl = await URL.find({ shortData: shortUrl });
-//   let shorturl = await URL.findOneAndUpdate(
-//     {
-//       shortData: shortUrl,
-//     },
-//     {
-//       $push: {
-//         TotalClicks: {
-//           timeStamp: new Date(Date.now()).toString(),
-//         },
-//       },
-//     }
-//   );
-//   // console.log(shorturl)
-//   await console.log("total clicks : "+shorturl.TotalClicks.length)
-  
-//   // res.redirect(shorturl.redirecUrl);
-//   res.send(shorturl)
-// });
 
 app.get("/:id", async (req, res) => {
   const shortUrl = req.params.id;
