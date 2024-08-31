@@ -7,7 +7,6 @@ router.get("/",async (req,res)=>
       console.log(allUrls)
       return res.render('home',{
         urls:allUrls,
-        name:'pus'
       })
     })
 
